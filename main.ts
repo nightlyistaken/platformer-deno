@@ -10,7 +10,7 @@ canvas.present();
 function game() {
     // Game Logic
 }
-
+ 
 for await (const event of canvas) {
   switch (event.type) {
     case "quit":
