@@ -14,30 +14,38 @@ canvas.clear();
 
 // Variables
 const gravity = 2;
-let is_space = false;
-let is_right = false;
-let is_left = false;
+let isSpace = false;
+let isRight = false;
+let isLeft = false;
 
 const assets = "assets/";
 const playerSurfaceJump = canvas.loadSurface(assets + "sprites/player.png");
 const playerImgJump = canvas.createTextureFromSurface(playerSurfaceJump);
 
-let playerDimensions = 64;
+const playerDimensions = 64;
 let playerY = 50;
 let playerX = 300;
 // Functions
 
 console.log("Started to draw!");
 function gameLoop() {
-  if (is_space) {
+  if (isSpace) {
     playerY -= 70;
-    is_space = false;
+    isSpace = false;
   } else {
     // Give player downwards acceleration
     playerY += gravity;
   }
+  if (isLeft) {
+    playerX -= 10;
+    isLeft = false;
+  }
+  if (isRight) {
+    playerX += 10;
+    isRight = false;
+  }
   // Reset space state
-  is_space = false;
+  isSpace = false;
   canvas.copy(
     playerImgJump,
     {
@@ -55,7 +63,6 @@ function gameLoop() {
   );
   if (playerY >= 400 - playerDimensions) {
     playerY = 400 - playerDimensions;
-    return;
   }
   canvas.present();
   canvas.clear();
@@ -78,23 +85,23 @@ for await (const event of canvas) {
     case "key_down":
       if (event.keycode == 32) {
         console.log("Space key is pressed");
-        if (!is_space) is_space = true;
+        if (!isSpace) isSpace = true;
       }
       if (event.keycode == 97) {
         console.log("A key is pressed");
-        if (!is_left) is_left = true;
+        if (!isLeft) isLeft = true;
       }
       if (event.keycode == 100) {
         console.log("D key is pressed");
-        if (!is_right) is_right = true;
+        if (!isRight) isRight = true;
       }
       if (event.keycode == 1073741904) {
         console.log("Left arrow key AKA A is pressed");
-        if (!is_left) is_left = true;
+        if (!isLeft) isLeft = true;
       }
       if (event.keycode == 1073741903) {
         console.log("Right arrow key AKA D is pressed");
-        if (!is_right) is_right = true;
+        if (!isRight) isRight = true;
       }
       break;
     default:
