@@ -25,8 +25,26 @@ const playerImgJump = canvas.createTextureFromSurface(playerSurfaceJump);
 const playerDimensions = 64;
 let playerY = 50;
 let playerX = 300;
+let playerX_change = 0;
 // Functions
 
+function player(x: number, y: number) {
+  canvas.copy(
+    playerImgJump,
+    {
+      x: 0,
+      y: 0,
+      width: 140,
+      height: 140,
+    },
+    {
+      x: x,
+      y: y,
+      width: playerDimensions,
+      height: playerDimensions,
+    }
+  );
+}
 console.log("Started to draw!");
 function gameLoop() {
   if (isSpace) {
@@ -37,35 +55,24 @@ function gameLoop() {
     playerY += gravity;
   }
   if (isLeft) {
-    playerX -= 10;
+    playerX_change -= 1;
     isLeft = false;
   }
   if (isRight) {
-    playerX += 10;
+    playerX_change += 1;
     isRight = false;
   }
+  player(playerX, playerY);
+
+  playerX += playerX_change;
   // Reset space state
-  isSpace = false;
-  canvas.copy(
-    playerImgJump,
-    {
-      x: 0,
-      y: 0,
-      width: 140,
-      height: 140,
-    },
-    {
-      x: playerX,
-      y: playerY,
-      width: playerDimensions,
-      height: playerDimensions,
-    }
-  );
+
   if (playerY >= 400 - playerDimensions) {
     playerY = 400 - playerDimensions;
   }
   canvas.present();
   canvas.clear();
+  Deno.sleepSync(10);
 }
 
 canvas.present();
