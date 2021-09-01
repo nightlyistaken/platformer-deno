@@ -1,8 +1,7 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
-function start(canvas: Canvas) {
-  canvas.setCursor("assets/sprites/mainCursor.png");
-  canvas.setDrawColor(0, 64, 255, 255);
+function level1(canvas: Canvas) {
   canvas.clear();
+  console.log("This is level 1");
 }
 // Export
-export default start;
+export default level1;

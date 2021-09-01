@@ -2,6 +2,7 @@ import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
 import Entity from "./src/classes/entity.ts";
 import start from "./src/start.ts";
 import end from "./src/end.ts";
+import level1 from "./src/levels/level1.ts";
 
 const canvasWidth = 800;
 const canvasHeight = 400;
@@ -63,6 +64,7 @@ function gameLoop() {
   }
   if (isRight) {
     player.xChange += 1;
+    end(canvas);
     isRight = false;
   }
   drawPlayer(player.x, player.y);
@@ -98,6 +100,7 @@ for await (const event of canvas) {
       if (event.keycode == 32) {
         console.log("Space key is pressed");
         if (!isSpace) isSpace = true;
+        level1(canvas);
       }
       if (event.keycode == 97) {
         console.log("A key is pressed");
