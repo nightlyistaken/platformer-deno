@@ -20,18 +20,22 @@ let isSpace = false;
 let isRight = false;
 let isLeft = false;
 
+// 1 arg: playerX 2 arg: playerY, 3 and 4 args: X and Y change values, 5 arg: Dimensions,
+// 6 arg: dimensions, 7 arg: image of the entity, 8 arg: name of the entity,
+// 9 arg: The game screen AKA canvas.
 const player = new Entity(
   300,
   50,
   0,
+  0,
   64,
   "sprites/player.png",
-  "Denosaur",
+  "My player",
   canvas
 );
+console.log(player.name);
 
 // Functions
-console.log(player.name);
 function drawPlayer(x: number, y: number) {
   canvas.copy(
     player.image,

@@ -4,6 +4,7 @@ class Entity {
   x: number;
   y: number;
   xChange: number;
+  yChange: number;
   dimensions: number;
   image: any;
   imageSurface: any;
@@ -12,14 +13,16 @@ class Entity {
     x: number,
     y: number,
     xChange: number,
+    yChange: number,
     dimensions: number,
     imageSurface: any,
     name: string,
-    canvas: Canvas
+    canvas: Canvas,
   ) {
     this.x = x;
     this.y = y;
     this.xChange = xChange;
+    this.yChange = yChange;
     this.dimensions = dimensions;
     this.imageSurface = canvas.loadSurface("assets/" + imageSurface);
     this.image = canvas.createTextureFromSurface(this.imageSurface);
