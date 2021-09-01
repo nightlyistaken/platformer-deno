@@ -1,17 +1,17 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
+import start from "./src/start.ts";
+import end from "./src/end.ts";
+
 const canvasWidth = 800;
 const canvasHeight = 400;
+
 // Change canvasHeight and canvasWidth after deno_sdl2 width, height fix.
 const canvas = new Canvas({
   title: "deno-platformer",
   width: canvasHeight,
   height: canvasWidth,
 });
-
-canvas.setCursor("assets/sprites/mainCursor.png");
-canvas.setDrawColor(0, 64, 255, 255);
-canvas.clear();
-
+start(canvas);
 // Variables
 const gravity = 2;
 let isSpace = false;
@@ -19,6 +19,12 @@ let isRight = false;
 let isLeft = false;
 
 const assets = "assets/";
+class Player {
+  constructor(x: any, y: any, x_change: any, dimensions: any, image: any) {
+    this.x = x;
+  }
+}
+const playerEntity = new Player(1, 2, 3, 4, 5);
 const playerSurfaceJump = canvas.loadSurface(assets + "sprites/player.png");
 const playerImgJump = canvas.createTextureFromSurface(playerSurfaceJump);
 
