@@ -19,24 +19,39 @@ let isRight = false;
 let isLeft = false;
 
 const assets = "assets/";
-class Player {
-  constructor(x: any, y: any, x_change: any, dimensions: any, image: any) {
+
+class Entity {
+  x: number;
+  y: number;
+  x_change: number;
+  dimensions: number;
+  image: any;
+  name: string;
+  imageSurface: any;
+  constructor(
+    x: number,
+    y: number,
+    x_change: number,
+    dimensions: number,
+    imageSurface: any,
+    name: string
+  ) {
     this.x = x;
+    this.y = y;
+    this.x_change = x_change;
+    this.dimensions = dimensions;
+    this.imageSurface = canvas.loadSurface("assets/" + imageSurface);
+    this.image = canvas.createTextureFromSurface(this.imageSurface);
+    this.name = name;
   }
 }
-const playerEntity = new Player(1, 2, 3, 4, 5);
-const playerSurfaceJump = canvas.loadSurface(assets + "sprites/player.png");
-const playerImgJump = canvas.createTextureFromSurface(playerSurfaceJump);
+const player = new Entity(300, 50, 0, 64, "sprites/player.png", "Denosaur");
 
-const playerDimensions = 64;
-let playerY = 50;
-let playerX = 300;
-let playerX_change = 0;
 // Functions
-
-function player(x: number, y: number) {
+console.log(player.name);
+function drawPlayer(x: number, y: number) {
   canvas.copy(
-    playerImgJump,
+    player.image,
     {
       x: 0,
       y: 0,
@@ -46,35 +61,35 @@ function player(x: number, y: number) {
     {
       x: x,
       y: y,
-      width: playerDimensions,
-      height: playerDimensions,
+      width: player.dimensions,
+      height: player.dimensions,
     }
   );
 }
 console.log("Started to draw!");
 function gameLoop() {
   if (isSpace) {
-    playerY -= 70;
+    player.y -= 70;
     isSpace = false;
   } else {
     // Give player downwards acceleration
-    playerY += gravity;
+    player.y += gravity;
   }
   if (isLeft) {
-    playerX_change -= 1;
+    player.x_change -= 1;
     isLeft = false;
   }
   if (isRight) {
-    playerX_change += 1;
+    player.x_change += 1;
     isRight = false;
   }
-  player(playerX, playerY);
+  drawPlayer(player.x, player.y);
 
-  playerX += playerX_change;
+  player.x += player.x_change;
   // Reset space state
 
-  if (playerY >= 400 - playerDimensions) {
-    playerY = 400 - playerDimensions;
+  if (player.y >= 400 - player.dimensions) {
+    player.y = 400 - player.dimensions;
   }
   canvas.present();
   canvas.clear();
