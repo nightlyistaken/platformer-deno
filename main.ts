@@ -1,4 +1,5 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
+import Entity from "./src/classes/entity.ts";
 import start from "./src/start.ts";
 import end from "./src/end.ts";
 
@@ -18,34 +19,15 @@ let isSpace = false;
 let isRight = false;
 let isLeft = false;
 
-const assets = "assets/";
-
-class Entity {
-  x: number;
-  y: number;
-  x_change: number;
-  dimensions: number;
-  image: any;
-  name: string;
-  imageSurface: any;
-  constructor(
-    x: number,
-    y: number,
-    x_change: number,
-    dimensions: number,
-    imageSurface: any,
-    name: string
-  ) {
-    this.x = x;
-    this.y = y;
-    this.x_change = x_change;
-    this.dimensions = dimensions;
-    this.imageSurface = canvas.loadSurface("assets/" + imageSurface);
-    this.image = canvas.createTextureFromSurface(this.imageSurface);
-    this.name = name;
-  }
-}
-const player = new Entity(300, 50, 0, 64, "sprites/player.png", "Denosaur");
+const player = new Entity(
+  300,
+  50,
+  0,
+  64,
+  "sprites/player.png",
+  "Denosaur",
+  canvas
+);
 
 // Functions
 console.log(player.name);
@@ -76,16 +58,16 @@ function gameLoop() {
     player.y += gravity;
   }
   if (isLeft) {
-    player.x_change -= 1;
+    player.xChange -= 1;
     isLeft = false;
   }
   if (isRight) {
-    player.x_change += 1;
+    player.xChange += 1;
     isRight = false;
   }
   drawPlayer(player.x, player.y);
 
-  player.x += player.x_change;
+  player.x += player.xChange;
   // Reset space state
 
   if (player.y >= 400 - player.dimensions) {
@@ -93,11 +75,13 @@ function gameLoop() {
   }
   canvas.present();
   canvas.clear();
+
+  // @ts-ignore: Deno Functionality
   Deno.sleepSync(10);
 }
 
 canvas.present();
-// @ts-ignore
+// @ts-ignore: FIXME: Why a redline?
 for await (const event of canvas) {
   switch (event.type) {
     case "quit":
