@@ -4,5 +4,4 @@ function start(canvas: Canvas) {
   canvas.setDrawColor(0, 64, 255, 255);
   canvas.clear();
 }
-// Export
 export default start;

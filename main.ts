@@ -65,7 +65,6 @@ function gameLoop() {
   canvas.present();
   canvas.clear();
 
-  
   Deno.sleepSync(10);
 }
 
