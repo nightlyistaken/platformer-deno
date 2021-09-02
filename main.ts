@@ -16,7 +16,7 @@ const canvas = new Canvas({
 });
 start(canvas);
 // Variables
-let gravity = 2;
+const gravity = 2;
 const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 50, {
   style: "normal",
 });
@@ -91,16 +91,15 @@ function gameLoop() {
       )
     ) {
       if (level == 1) {
-        level += 1;
+        level = 2;
         level1(canvas, font);
       }
-      level1(canvas, font);
       canvas.present();
     }
+    canvas.clear();
     player.draw(player.x, player.y, canvas, player);
     levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
     canvas.present();
-    canvas.clear();
   } else {
     canvas.clear();
     gameIntro(canvas, font);

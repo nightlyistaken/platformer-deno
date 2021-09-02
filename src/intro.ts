@@ -12,7 +12,7 @@ function gameIntro(canvas: Canvas, font: any) {
     {
       x: 150,
       y: 30,
-    }
+    },
   );
 }
 

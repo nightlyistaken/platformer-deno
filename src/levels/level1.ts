@@ -13,7 +13,7 @@ function level1(canvas: Canvas, font: any) {
     {
       x: 0,
       y: 80,
-    }
+    },
   );
   canvas.present();
 }
