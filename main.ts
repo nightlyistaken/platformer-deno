@@ -1,5 +1,5 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
-import Entity from "./src/classes/entity.ts";
+import Player from "./src/classes/player.ts";
 import start from "./src/start.ts";
 import end from "./src/end.ts";
 import level1 from "./src/levels/level1.ts";
@@ -23,7 +23,7 @@ let isLeft = false;
 // 1 arg: playerX 2 arg: playerY, 3 and 4 args: X and Y change values, 5 arg: Dimensions,
 // 6 arg: dimensions, 7 arg: image of the entity, 8 arg: name of the entity,
 // 9 arg: The game screen AKA canvas.
-const player = new Entity(
+const player = new Player(
   300,
   50,
   0,
@@ -36,23 +36,6 @@ const player = new Entity(
 console.log(player.name);
 
 // Functions
-function drawPlayer(x: number, y: number) {
-  canvas.copy(
-    player.image,
-    {
-      x: 0,
-      y: 0,
-      width: 140,
-      height: 140,
-    },
-    {
-      x: x,
-      y: y,
-      width: player.dimensions,
-      height: player.dimensions,
-    }
-  );
-}
 console.log("Started to draw!");
 function gameLoop() {
   if (isSpace) {
@@ -71,7 +54,7 @@ function gameLoop() {
     end(canvas);
     isRight = false;
   }
-  drawPlayer(player.x, player.y);
+  player.draw(player.x, player.y, canvas, player);
 
   player.x += player.xChange;
   // Reset space state
@@ -82,12 +65,12 @@ function gameLoop() {
   canvas.present();
   canvas.clear();
 
-  // @ts-ignore: Deno Functionality
+  
   Deno.sleepSync(10);
 }
 
 canvas.present();
-// @ts-ignore: FIXME: Why a redline?
+
 for await (const event of canvas) {
   switch (event.type) {
     case "quit":
@@ -104,7 +87,6 @@ for await (const event of canvas) {
       if (event.keycode == 32) {
         console.log("Space key is pressed");
         if (!isSpace) isSpace = true;
-        level1(canvas);
       }
       if (event.keycode == 97) {
         console.log("A key is pressed");

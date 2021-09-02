@@ -1,6 +1,6 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
 // TODO: Add some music :)
-class Entity {
+class Player {
   x: number;
   y: number;
   xChange: number;
@@ -17,7 +17,7 @@ class Entity {
     dimensions: number,
     imageSurface: any,
     name: string,
-    canvas: Canvas,
+    canvas: Canvas
   ) {
     this.x = x;
     this.y = y;
@@ -28,5 +28,22 @@ class Entity {
     this.image = canvas.createTextureFromSurface(this.imageSurface);
     this.name = name;
   }
+  draw(x: number, y: number, canvas: Canvas, player: Player) {
+    canvas.copy(
+      player.image,
+      {
+        x: 0,
+        y: 0,
+        width: 140,
+        height: 140,
+      },
+      {
+        x: x,
+        y: y,
+        width: player.dimensions,
+        height: player.dimensions,
+      }
+    );
+  }
 }
-export default Entity;
+export default Player;
