@@ -1,6 +1,7 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
 import Player from "./src/classes/player.ts";
 import start from "./src/start.ts";
+import gameIntro from "./src/intro.ts";
 import end from "./src/end.ts";
 import level1 from "./src/levels/level1.ts";
 
@@ -16,9 +17,16 @@ const canvas = new Canvas({
 start(canvas);
 // Variables
 const gravity = 2;
+const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 70, {
+  style: "normal",
+});
+
 let isSpace = false;
 let isRight = false;
 let isLeft = false;
+let isYes = false;
+
+let intro = true;
 
 // 1 arg: playerX 2 arg: playerY, 3 and 4 args: X and Y change values, 5 arg: Dimensions,
 // 6 arg: dimensions, 7 arg: image of the entity, 8 arg: name of the entity,
@@ -38,33 +46,42 @@ console.log(player.name);
 // Functions
 console.log("Started to draw!");
 function gameLoop() {
-  if (isSpace) {
-    player.y -= 70;
-    isSpace = false;
+  if (!intro) {
+    if (isSpace) {
+      player.y -= 70;
+      isSpace = false;
+    } else {
+      // Give player downwards acceleration
+      player.y += gravity;
+    }
+    if (isLeft) {
+      player.xChange -= 1;
+      isLeft = false;
+    }
+    if (isRight) {
+      player.xChange += 1;
+      end(canvas);
+      isRight = false;
+    }
+    player.draw(player.x, player.y, canvas, player);
+
+    player.x += player.xChange;
+    // Reset space state
+
+    if (player.y >= 400 - player.dimensions) {
+      player.y = 400 - player.dimensions;
+    }
+    if (isYes) {
+      level1(canvas);
+      isYes = false;
+    }
+    canvas.present();
+    canvas.clear();
   } else {
-    // Give player downwards acceleration
-    player.y += gravity;
+    canvas.clear();
+    gameIntro(canvas, font);
+    canvas.present();
   }
-  if (isLeft) {
-    player.xChange -= 1;
-    isLeft = false;
-  }
-  if (isRight) {
-    player.xChange += 1;
-    end(canvas);
-    isRight = false;
-  }
-  player.draw(player.x, player.y, canvas, player);
-
-  player.x += player.xChange;
-  // Reset space state
-
-  if (player.y >= 400 - player.dimensions) {
-    player.y = 400 - player.dimensions;
-  }
-  canvas.present();
-  canvas.clear();
-
   Deno.sleepSync(10);
 }
 
@@ -87,6 +104,7 @@ for await (const event of canvas) {
         console.log("Space key is pressed");
         if (!isSpace) isSpace = true;
       }
+      console.log(event);
       if (event.keycode == 97) {
         console.log("A key is pressed");
         if (!isLeft) isLeft = true;
@@ -102,6 +120,11 @@ for await (const event of canvas) {
       if (event.keycode == 1073741903) {
         console.log("Right arrow key AKA D is pressed");
         if (!isRight) isRight = true;
+      }
+      if (event.keycode == 121) {
+        console.log("Left arrow key AKA A is pressed");
+        if (!isYes) isYes = true;
+        intro = false;
       }
       break;
     default:
