@@ -1,5 +1,5 @@
 # VS code settings
-.vscode/
+.vscode
 
 # For windows
 deno_sdl2.exe
