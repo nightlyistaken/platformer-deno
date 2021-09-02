@@ -4,7 +4,7 @@ import start from "./src/start.ts";
 import gameIntro from "./src/intro.ts";
 import end from "./src/end.ts";
 import level1 from "./src/levels/level1.ts";
-
+import checkCollusion from "./src/functions/collusion.ts";
 const canvasWidth = 800;
 const canvasHeight = 400;
 
@@ -16,18 +16,16 @@ const canvas = new Canvas({
 });
 start(canvas);
 // Variables
-const gravity = 2;
-const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 70, {
+let gravity = 2;
+const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 50, {
   style: "normal",
 });
 
 let isSpace = false;
 let isRight = false;
 let isLeft = false;
-let isYes = false;
-
 let intro = true;
-
+let level = 1;
 // 1 arg: playerX 2 arg: playerY, 3 and 4 args: X and Y change values, 5 arg: Dimensions,
 // 6 arg: dimensions, 7 arg: image of the entity, 8 arg: name of the entity,
 // 9 arg: The game screen AKA canvas.
@@ -39,6 +37,16 @@ const player = new Player(
   64,
   "sprites/player.png",
   "My player",
+  canvas
+);
+const levelPasser = new Player(
+  100,
+  50,
+  0,
+  0,
+  34,
+  "sprites/player.png",
+  "Level passer",
   canvas
 );
 console.log(player.name);
@@ -63,7 +71,6 @@ function gameLoop() {
       end(canvas);
       isRight = false;
     }
-    player.draw(player.x, player.y, canvas, player);
 
     player.x += player.xChange;
     // Reset space state
@@ -71,10 +78,27 @@ function gameLoop() {
     if (player.y >= 400 - player.dimensions) {
       player.y = 400 - player.dimensions;
     }
-    if (isYes) {
-      level1(canvas);
-      isYes = false;
+    if (
+      checkCollusion(
+        player.x,
+        player.y,
+        player.dimensions,
+        player.dimensions,
+        levelPasser.x,
+        levelPasser.y,
+        levelPasser.dimensions,
+        levelPasser.dimensions
+      )
+    ) {
+      if (level == 1) {
+        level += 1;
+        level1(canvas, font);
+      }
+      level1(canvas, font);
+      canvas.present();
     }
+    player.draw(player.x, player.y, canvas, player);
+    levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
     canvas.present();
     canvas.clear();
   } else {
@@ -104,7 +128,6 @@ for await (const event of canvas) {
         console.log("Space key is pressed");
         if (!isSpace) isSpace = true;
       }
-      console.log(event);
       if (event.keycode == 97) {
         console.log("A key is pressed");
         if (!isLeft) isLeft = true;
@@ -122,8 +145,7 @@ for await (const event of canvas) {
         if (!isRight) isRight = true;
       }
       if (event.keycode == 121) {
-        console.log("Left arrow key AKA A is pressed");
-        if (!isYes) isYes = true;
+        console.log("Y key is pressed");
         intro = false;
       }
       break;
