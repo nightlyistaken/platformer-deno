@@ -7,7 +7,7 @@ let levelPasser: Player;
 export function checkLevelPass(
   player: Player,
   canvas: Canvas,
-  font: number,
+  font: number
 ): boolean {
   if (
     checkCollusion(
@@ -18,11 +18,11 @@ export function checkLevelPass(
       levelPasser.x,
       levelPasser.y,
       levelPasser.dimensions,
-      levelPasser.dimensions,
+      levelPasser.dimensions
     )
   ) {
     canvas.clear();
-    // Pla
+    // Play
     canvas.playMusic("assets/audio/passLevel.wav");
     canvas.renderFont(
       font,
@@ -34,7 +34,7 @@ export function checkLevelPass(
       {
         x: 250,
         y: 200,
-      },
+      }
     );
     canvas.present();
     return true;
@@ -42,7 +42,43 @@ export function checkLevelPass(
   return false;
 }
 
-function level0(canvas: Canvas, _font: number) {
+function level0(canvas: Canvas, font: number) {
+  canvas.renderFont(
+    font,
+    "Move Using WASD",
+    {
+      blended: { color: { r: 25, g: 105, b: 0, a: 255 } },
+    },
+    // @ts-ignore: using --no-check
+    {
+      x: 350,
+      y: 200,
+    }
+  );
+  canvas.renderFont(
+    font,
+    "And Your Objective is to",
+    {
+      blended: { color: { r: 25, g: 105, b: 0, a: 255 } },
+    },
+    // @ts-ignore: using --no-check
+    {
+      x: 350,
+      y: 300,
+    }
+  );
+  canvas.renderFont(
+    font,
+    "Touch your opponent",
+    {
+      blended: { color: { r: 25, g: 105, b: 0, a: 255 } },
+    },
+    // @ts-ignore: using --no-check
+    {
+      x: 350,
+      y: 400,
+    }
+  );
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
 
@@ -63,7 +99,7 @@ function level3(canvas: Canvas, _font: number) {
 }
 
 export default function init(
-  canvas: Canvas,
+  canvas: Canvas
 ): ((canvas: Canvas, font: number) => void)[] {
   levelPasser = new Player(
     100,
@@ -73,7 +109,7 @@ export default function init(
     34,
     "sprites/player.png",
     "Level passer",
-    canvas,
+    canvas
   );
 
   return [level0, level1, level2, level3];

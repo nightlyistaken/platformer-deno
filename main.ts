@@ -17,9 +17,10 @@ canvas.clear();
 
 // Variables
 const gravity = 1;
-const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 50, {
+const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 20, {
   style: "normal",
 });
+// TODO: Add some music -_-
 const BgSurface = canvas.loadSurface("assets/sprites/sky.png");
 const BgImg = canvas.createTextureFromSurface(BgSurface);
 
@@ -43,35 +44,38 @@ const player = new Player(
   64,
   "sprites/player.png",
   "My player",
-  canvas,
+  canvas
 );
 
 // Functions
 console.log("Started to draw!");
 function gameLoop() {
-  canvas.copy(
-    BgImg,
-    {
-      x: 0,
-      y: 0,
-      width: 1024,
-      height: 576,
-    },
-    {
-      x: 0,
-      y: 0,
-      width: 1024,
-      height: 576,
-    },
-  );
+  canvas.setDrawColor(255, 55, 25, 255);
   if (levelTransition) {
     return;
   }
   if (!intro) {
+    canvas.copy(
+      BgImg,
+      {
+        x: 0,
+        y: 0,
+        width: 200,
+        height: 576,
+      },
+      {
+        x: 0,
+        y: 0,
+        width: 200,
+        height: 576,
+      }
+    );
     if (isSpace) {
       player.y -= 80;
+      canvas.playMusic("assets/audio/jump.wav");
       isSpace = false;
     } else {
+      /// HELP ME PLS SOMEONE :( pls pls
       // Give player downwards acceleration
       player.y += gravity;
     }
