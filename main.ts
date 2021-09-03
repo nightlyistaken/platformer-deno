@@ -13,13 +13,15 @@ const canvas = new Canvas({
   height: canvasWidth,
 });
 canvas.setCursor("assets/sprites/mainCursor.png");
-canvas.setDrawColor(0, 64, 255, 255);
 canvas.clear();
+
 // Variables
-const gravity = 2;
+const gravity = 1;
 const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 50, {
   style: "normal",
 });
+const BgSurface = canvas.loadSurface("assets/sprites/sky.png");
+const BgImg = canvas.createTextureFromSurface(BgSurface);
 
 let isSpace = false;
 let isRight = false;
@@ -41,18 +43,33 @@ const player = new Player(
   64,
   "sprites/player.png",
   "My player",
-  canvas
+  canvas,
 );
 
 // Functions
 console.log("Started to draw!");
 function gameLoop() {
+  canvas.copy(
+    BgImg,
+    {
+      x: 0,
+      y: 0,
+      width: 1024,
+      height: 576,
+    },
+    {
+      x: 0,
+      y: 0,
+      width: 1024,
+      height: 576,
+    },
+  );
   if (levelTransition) {
     return;
   }
   if (!intro) {
     if (isSpace) {
-      player.y -= 70;
+      player.y -= 80;
       isSpace = false;
     } else {
       // Give player downwards acceleration
@@ -72,6 +89,9 @@ function gameLoop() {
 
     if (player.y >= canvasHeight - player.dimensions) {
       player.y = canvasHeight - player.dimensions;
+    }
+    if (player.x >= canvasWidth - player.dimensions) {
+      player.x = canvasWidth - player.dimensions;
     }
     canvas.clear();
     if (checkLevelPass(player, canvas, font)) {
@@ -93,7 +113,7 @@ function gameLoop() {
     // Level renderer
     if (level > levels.length) {
       // All levels passed
-      console.log("All levels done");
+      return;
     } else {
       levels[level - 1](canvas, font);
     }

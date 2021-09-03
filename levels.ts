@@ -21,18 +21,19 @@ export function checkLevelPass(
       levelPasser.dimensions,
     )
   ) {
-    canvas.setDrawColor(100, 100, 23, 255);
     canvas.clear();
+    // Pla
+    canvas.playMusic("assets/audio/passLevel.wav");
     canvas.renderFont(
       font,
       "Loading...",
       {
-        blended: { color: { r: 255, g: 255, b: 0, a: 255 } },
+        blended: { color: { r: 25, g: 105, b: 0, a: 255 } },
       },
       // @ts-ignore: using --no-check
       {
-        x: 0,
-        y: 80,
+        x: 250,
+        y: 200,
       },
     );
     canvas.present();
@@ -50,6 +51,16 @@ function level1(canvas: Canvas, _font: number) {
   levelPasser.y = 300;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
+function level2(canvas: Canvas, _font: number) {
+  levelPasser.x = 500;
+  levelPasser.y = 200;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+}
+function level3(canvas: Canvas, _font: number) {
+  levelPasser.x = 10;
+  levelPasser.y = 20;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+}
 
 export default function init(
   canvas: Canvas,
@@ -65,5 +76,5 @@ export default function init(
     canvas,
   );
 
-  return [level0, level1];
+  return [level0, level1, level2, level3];
 }
