@@ -3,8 +3,8 @@ import Player from "./src/classes/player.ts";
 import gameIntro from "./src/intro.ts";
 import levelsInit, { checkLevelPass } from "./levels.ts";
 
-const canvasWidth = 800;
-const canvasHeight = 400;
+const canvasWidth = 1000;
+const canvasHeight = 600;
 
 // Change canvasHeight and canvasWidth after deno_sdl2 width, height fix.
 const canvas = new Canvas({
@@ -27,7 +27,7 @@ let isLeft = false;
 let intro = true;
 
 let level = 1;
-let levels = levelsInit(canvas);
+const levels = levelsInit(canvas);
 let levelTransition = false;
 
 // 1 arg: playerX 2 arg: playerY, 3 and 4 args: X and Y change values, 5 arg: Dimensions,
@@ -70,8 +70,8 @@ function gameLoop() {
     player.x += player.xChange;
     // Reset space state
 
-    if (player.y >= 400 - player.dimensions) {
-      player.y = 400 - player.dimensions;
+    if (player.y >= canvasHeight - player.dimensions) {
+      player.y = canvasHeight - player.dimensions;
     }
     canvas.clear();
     if (checkLevelPass(player, canvas, font)) {
