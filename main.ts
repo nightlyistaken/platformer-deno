@@ -1,10 +1,8 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
 import Player from "./src/classes/player.ts";
-import start from "./src/start.ts";
 import gameIntro from "./src/intro.ts";
-import end from "./src/end.ts";
-import level1 from "./src/levels/level1.ts";
-import checkCollusion from "./src/functions/collusion.ts";
+import levelsInit, { checkLevelPass } from "./levels.ts";
+
 const canvasWidth = 800;
 const canvasHeight = 400;
 
@@ -14,7 +12,9 @@ const canvas = new Canvas({
   width: canvasHeight,
   height: canvasWidth,
 });
-start(canvas);
+canvas.setCursor("assets/sprites/mainCursor.png");
+canvas.setDrawColor(0, 64, 255, 255);
+canvas.clear();
 // Variables
 const gravity = 2;
 const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 50, {
@@ -25,7 +25,11 @@ let isSpace = false;
 let isRight = false;
 let isLeft = false;
 let intro = true;
+
 let level = 1;
+let levels = levelsInit(canvas);
+let levelTransition = false;
+
 // 1 arg: playerX 2 arg: playerY, 3 and 4 args: X and Y change values, 5 arg: Dimensions,
 // 6 arg: dimensions, 7 arg: image of the entity, 8 arg: name of the entity,
 // 9 arg: The game screen AKA canvas.
@@ -39,21 +43,13 @@ const player = new Player(
   "My player",
   canvas
 );
-const levelPasser = new Player(
-  100,
-  50,
-  0,
-  0,
-  34,
-  "sprites/player.png",
-  "Level passer",
-  canvas
-);
-console.log(player.name);
 
 // Functions
 console.log("Started to draw!");
 function gameLoop() {
+  if (levelTransition) {
+    return;
+  }
   if (!intro) {
     if (isSpace) {
       player.y -= 70;
@@ -68,7 +64,6 @@ function gameLoop() {
     }
     if (isRight) {
       player.xChange += 1;
-      end(canvas);
       isRight = false;
     }
 
@@ -78,27 +73,31 @@ function gameLoop() {
     if (player.y >= 400 - player.dimensions) {
       player.y = 400 - player.dimensions;
     }
-    if (
-      checkCollusion(
-        player.x,
-        player.y,
-        player.dimensions,
-        player.dimensions,
-        levelPasser.x,
-        levelPasser.y,
-        levelPasser.dimensions,
-        levelPasser.dimensions
-      )
-    ) {
-      if (level == 1) {
-        level = 2;
-        level1(canvas, font);
-      }
-      canvas.present();
-    }
     canvas.clear();
+    if (checkLevelPass(player, canvas, font)) {
+      level += 1;
+      levelTransition = true;
+      setTimeout(() => {
+        levelTransition = false;
+        // Spawn player
+        player.x = 0;
+        player.y = 0;
+      }, 1000);
+      // Move player out of map
+      player.x = 1000;
+      player.y = 1000;
+    }
+
     player.draw(player.x, player.y, canvas, player);
-    levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+
+    // Level renderer
+    if (level > levels.length) {
+      // All levels passed
+      console.log("All levels done");
+    } else {
+      levels[level - 1](canvas, font);
+    }
+
     canvas.present();
   } else {
     canvas.clear();
