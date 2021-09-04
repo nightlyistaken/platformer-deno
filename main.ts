@@ -21,6 +21,7 @@ const font = canvas.loadFont("./assets/fonts/mainfont.ttf", 20, {
   style: "normal",
 });
 // TODO: Add some music -_-
+// DOING:
 const BgSurface = canvas.loadSurface("assets/sprites/sky.png");
 const BgImg = canvas.createTextureFromSurface(BgSurface);
 
@@ -28,7 +29,7 @@ let isSpace = false;
 let isRight = false;
 let isLeft = false;
 let intro = true;
-
+let playing = false;
 let level = 1;
 const levels = levelsInit(canvas);
 let levelTransition = false;
@@ -55,19 +56,24 @@ function gameLoop() {
     return;
   }
   if (!intro) {
+    if (!playing) {
+      canvas.playMusic("assets/audio/hit.wav");
+      playing = true;
+    }
+    canvas.clear();
     canvas.copy(
       BgImg,
       {
         x: 0,
         y: 0,
-        width: 200,
-        height: 576,
+        width: 1000,
+        height: 600,
       },
       {
         x: 0,
         y: 0,
-        width: 200,
-        height: 576,
+        width: 1000,
+        height: 600,
       }
     );
     if (isSpace) {
@@ -75,7 +81,6 @@ function gameLoop() {
       canvas.playMusic("assets/audio/jump.wav");
       isSpace = false;
     } else {
-      /// HELP ME PLS SOMEONE :( pls pls
       // Give player downwards acceleration
       player.y += gravity;
     }
@@ -97,7 +102,7 @@ function gameLoop() {
     if (player.x >= canvasWidth - player.dimensions) {
       player.x = canvasWidth - player.dimensions;
     }
-    canvas.clear();
+
     if (checkLevelPass(player, canvas, font)) {
       level += 1;
       levelTransition = true;
@@ -119,20 +124,18 @@ function gameLoop() {
       // All levels passed
       return;
     } else {
-      levels[level - 1](canvas, font);
+      levels[level - 1](canvas, font, player);
     }
 
     canvas.present();
   } else {
-    canvas.clear();
     gameIntro(canvas, font);
     canvas.present();
   }
+  // @ts-ignore: Deno is imported
   Deno.sleepSync(10);
 }
-
 canvas.present();
-
 for await (const event of canvas) {
   switch (event.type) {
     case "quit":
@@ -166,6 +169,7 @@ for await (const event of canvas) {
         console.log("Right arrow key AKA D is pressed");
         if (!isRight) isRight = true;
       }
+
       if (event.keycode == 121) {
         console.log("Y key is pressed");
         intro = false;

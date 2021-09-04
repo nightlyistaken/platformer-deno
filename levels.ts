@@ -82,25 +82,67 @@ function level0(canvas: Canvas, font: number) {
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
 
-function level1(canvas: Canvas, _font: number) {
+function level1(canvas: Canvas, _font: number, player: Player) {
+  const PlatformSurface = canvas.loadSurface("assets/sprites/platform.png");
+  const PlatformImg = canvas.createTextureFromSurface(PlatformSurface);
   levelPasser.x = 300;
   levelPasser.y = 300;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+  // use deno ;)
+  canvas.copy(
+    PlatformImg,
+    {
+      x: 0,
+      y: 0,
+      width: 88,
+      height: 88,
+    },
+    {
+      x: 100,
+      y: 200,
+      width: 88,
+      height: 88,
+    }
+  );
+  if (
+    checkCollusion(
+      player.x,
+      player.y,
+      player.dimensions,
+      player.dimensions,
+      100,
+      200,
+      88,
+      88
+    )
+  ) {
+    player.x = 100;
+  }
 }
 function level2(canvas: Canvas, _font: number) {
   levelPasser.x = 500;
   levelPasser.y = 200;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
-function level3(canvas: Canvas, _font: number) {
-  levelPasser.x = 10;
-  levelPasser.y = 20;
+function level3(canvas: Canvas, _font: number, player: Player) {
+  levelPasser.x = 100;
+  levelPasser.y = 290;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+}
+function level4(canvas: Canvas, _font: number, player: Player) {
+  levelPasser.x = 100;
+  levelPasser.y = 290;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+}
+function level5(canvas: Canvas, _font: number, player: Player) {
+  levelPasser.x = 500;
+  levelPasser.y = 402;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
 
 export default function init(
   canvas: Canvas
-): ((canvas: Canvas, font: number) => void)[] {
+): ((canvas: Canvas, font: number, player: Player) => void)[] {
   levelPasser = new Player(
     100,
     50,
@@ -112,5 +154,5 @@ export default function init(
     canvas
   );
 
-  return [level0, level1, level2, level3];
+  return [level0, level1, level2, level3, level4, level5];
 }

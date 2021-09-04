@@ -9,6 +9,7 @@ class Player {
   image: any;
   imageSurface: any;
   name: string;
+  dead: boolean;
   constructor(
     x: number,
     y: number,
@@ -17,7 +18,7 @@ class Player {
     dimensions: number,
     imageSurface: any,
     name: string,
-    canvas: Canvas,
+    canvas: Canvas
   ) {
     this.x = x;
     this.y = y;
@@ -42,9 +43,12 @@ class Player {
         y: y,
         width: player.dimensions,
         height: player.dimensions,
-      },
+      }
     );
   }
-
+  die(intro: any) {
+    this.dead = true;
+    intro = true;
+  }
 }
 export default Player;
