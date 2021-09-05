@@ -9,7 +9,6 @@ class Player {
   image: any;
   imageSurface: any;
   name: string;
-  dead: boolean;
   constructor(
     x: number,
     y: number,
@@ -45,10 +44,6 @@ class Player {
         height: player.dimensions,
       }
     );
-  }
-  die(intro: any) {
-    this.dead = true;
-    intro = true;
   }
 }
 export default Player;

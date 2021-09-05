@@ -83,7 +83,7 @@ function level0(canvas: Canvas, font: number) {
 }
 
 function level1(canvas: Canvas, _font: number, player: Player) {
-  const PlatformSurface = canvas.loadSurface("assets/sprites/platform.png");
+  const PlatformSurface = canvas.loadSurface("assets/sprites/pipe-down.png");
   const PlatformImg = canvas.createTextureFromSurface(PlatformSurface);
   levelPasser.x = 300;
   levelPasser.y = 300;
@@ -94,8 +94,8 @@ function level1(canvas: Canvas, _font: number, player: Player) {
     {
       x: 0,
       y: 0,
-      width: 88,
-      height: 88,
+      width: 52,
+      height: 320,
     },
     {
       x: 100,
