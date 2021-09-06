@@ -17,7 +17,7 @@ class Player {
     dimensions: number,
     imageSurface: any,
     name: string,
-    canvas: Canvas
+    canvas: Canvas,
   ) {
     this.x = x;
     this.y = y;
@@ -42,7 +42,7 @@ class Player {
         y: y,
         width: player.dimensions,
         height: player.dimensions,
-      }
+      },
     );
   }
 }

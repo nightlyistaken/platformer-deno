@@ -45,7 +45,7 @@ const player = new Player(
   64,
   "sprites/player.png",
   "My player",
-  canvas
+  canvas,
 );
 
 // Functions
@@ -74,7 +74,7 @@ function gameLoop() {
         y: 0,
         width: 1000,
         height: 600,
-      }
+      },
     );
     if (isSpace) {
       player.y -= 80;

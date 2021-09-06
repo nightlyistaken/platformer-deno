@@ -1,13 +1,14 @@
 import { Canvas } from "https://deno.land/x/sdl2@0.1-alpha.6/src/canvas.ts";
 import Player from "./src/classes/player.ts";
 import checkCollusion from "./src/functions/collusion.ts";
-
+let player: Player;
 let levelPasser: Player;
+let platform: Player;
 
 export function checkLevelPass(
   player: Player,
   canvas: Canvas,
-  font: number
+  font: number,
 ): boolean {
   if (
     checkCollusion(
@@ -18,9 +19,10 @@ export function checkLevelPass(
       levelPasser.x,
       levelPasser.y,
       levelPasser.dimensions,
-      levelPasser.dimensions
+      levelPasser.dimensions,
     )
   ) {
+    // f my ears
     canvas.clear();
     // Play
     canvas.playMusic("assets/audio/passLevel.wav");
@@ -34,7 +36,7 @@ export function checkLevelPass(
       {
         x: 250,
         y: 200,
-      }
+      },
     );
     canvas.present();
     return true;
@@ -52,8 +54,8 @@ function level0(canvas: Canvas, font: number) {
     // @ts-ignore: using --no-check
     {
       x: 350,
-      y: 200,
-    }
+      y: 250,
+    },
   );
   canvas.renderFont(
     font,
@@ -65,7 +67,7 @@ function level0(canvas: Canvas, font: number) {
     {
       x: 350,
       y: 300,
-    }
+    },
   );
   canvas.renderFont(
     font,
@@ -76,34 +78,20 @@ function level0(canvas: Canvas, font: number) {
     // @ts-ignore: using --no-check
     {
       x: 350,
-      y: 400,
-    }
+      y: 350,
+    },
   );
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
 
 function level1(canvas: Canvas, _font: number, player: Player) {
-  const PlatformSurface = canvas.loadSurface("assets/sprites/pipe-down.png");
-  const PlatformImg = canvas.createTextureFromSurface(PlatformSurface);
   levelPasser.x = 300;
   levelPasser.y = 300;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
-  // use deno ;)
-  canvas.copy(
-    PlatformImg,
-    {
-      x: 0,
-      y: 0,
-      width: 52,
-      height: 320,
-    },
-    {
-      x: 100,
-      y: 200,
-      width: 88,
-      height: 88,
-    }
-  );
+  platform.x = 100;
+  platform.y = 200;
+  platform.draw(platform.x, platform.y, canvas, platform);
+
   if (
     checkCollusion(
       player.x,
@@ -113,7 +101,7 @@ function level1(canvas: Canvas, _font: number, player: Player) {
       100,
       200,
       88,
-      88
+      88,
     )
   ) {
     player.x = 100;
@@ -124,7 +112,7 @@ function level2(canvas: Canvas, _font: number) {
   levelPasser.y = 200;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
-function level3(canvas: Canvas, _font: number, player: Player) {
+function level3(canvas: Canvas, _font: number) {
   levelPasser.x = 100;
   levelPasser.y = 290;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
@@ -134,14 +122,27 @@ function level4(canvas: Canvas, _font: number, player: Player) {
   levelPasser.y = 290;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
-function level5(canvas: Canvas, _font: number, player: Player) {
+function level5(canvas: Canvas, _font: number) {
   levelPasser.x = 500;
   levelPasser.y = 402;
   levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
 }
+function level6(canvas: Canvas, _font: number) {
+  levelPasser.x = 800;
+  levelPasser.y = 223;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+  levelPasser.x = 1000;
+  levelPasser.y = 500;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+}
+function level7(canvas: Canvas, _font: number) {
+  levelPasser.x = 800;
+  levelPasser.y = 223;
+  levelPasser.draw(levelPasser.x, levelPasser.y, canvas, levelPasser);
+}
 
 export default function init(
-  canvas: Canvas
+  canvas: Canvas,
 ): ((canvas: Canvas, font: number, player: Player) => void)[] {
   levelPasser = new Player(
     100,
@@ -149,10 +150,20 @@ export default function init(
     0,
     0,
     34,
-    "sprites/player.png",
+    "sprites/levelpass1.png",
     "Level passer",
-    canvas
+    canvas,
+  );
+  platform = new Player(
+    100,
+    200,
+    0,
+    0,
+    450,
+    "sprites/platform.png",
+    "Platform",
+    canvas,
   );
 
-  return [level0, level1, level2, level3, level4, level5];
+  return [level0, level1, level2, level3, level4, level5, level6, level7];
 }
